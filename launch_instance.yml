@@ -10,7 +10,6 @@
     key_name: my_aws
     region: ap-southeast-2
     image: ami-07fbdcfe29326c4fb # https://cloud-images.ubuntu.com/locator/ec2/
-    id: "web-app"
     sec_group: "{{ id }}-sec"
 
   tasks:
@@ -65,7 +64,6 @@
           aws_access_key: "{{ec2_access_key}}"
           aws_secret_key: "{{ec2_secret_key}}"
           key_name: "{{ key_name }}"
-          id: "{{ id }}"
           group_id: "{{ result_sec_group.group_id }}"
           image: "{{ image }}"
           instance_type: t2.micro
