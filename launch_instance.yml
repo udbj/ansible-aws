@@ -99,7 +99,7 @@
           key_name: "{{ key_name }}"
           state: 'absent'
           instance_ids: "{{item.instance_id}}"
-          wait: true
+          wait: false
         loop: "{{result.instances}}"
         
       tags: ['never', 'clear_ec2']
