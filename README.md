@@ -12,9 +12,9 @@ Deployment on AWS using Ansible.
 `ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass`
 
 4. Run the playbook:\
-`ansible-playbook playbook.yml --vault-password-file vault.pass`
+`ansible-playbook launch_instance.yml --vault-password-file vault.pass`
 
 5. To create new instances, use the ec2_create tag:\
-`ansible-playbook playbook.yml --vault-password-file vault.pass --tags create_ec2`
+`ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags create_ec2`
 
 
