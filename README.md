@@ -17,4 +17,5 @@ Deployment on AWS using Ansible.
 5. To create new instances, use the ec2_create tag:\
 `ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags create_ec2`
 
-
+6. Terminate all instances:\
+`ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags clear_ec2`
