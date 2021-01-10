@@ -1,6 +1,9 @@
 # ansible-aws
 Deployment on AWS using Ansible.
 
+## Access Keys
+`(Username tab) > My Security Credentials > Access Keys > Create New Access Key`
+
 ## Launch new instances
 1. Create SSH key using:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
