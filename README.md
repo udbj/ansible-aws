@@ -22,3 +22,5 @@ Deployment on AWS using Ansible.
 
 6. Terminate all instances:\
 `ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags clear_ec2`
+
+## Configure Dynamic Inventory
