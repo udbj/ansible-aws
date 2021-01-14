@@ -6,7 +6,7 @@ Deployment on AWS using Ansible.
 `(Username tab) > My Security Credentials > Access Keys > Create New Access Key`
 
 2. Setup Ansible inventory folder:\
-`mkdir -p /opt/ansible/inventory/group_vars/all`
+`mkdir -p /opt/ansible/inventory`
 
 3. Under the `inventory` folder:
   * Create Ansible vault and vault pass files:
@@ -30,14 +30,6 @@ Deployment on AWS using Ansible.
     - key: tags
       prefix: tag
 
-  compose:
-    ansible_user: "{{ansible_user}}"
-  ```
-  
-  * Create variables file in `group_vars/all`:
-  ```
-  ---
-  ansible_user : ubuntu
   ```
   
   * Final directory structure:
@@ -48,16 +40,13 @@ Deployment on AWS using Ansible.
   | |   |       |-inventory
   | |   |       |         |-aws_ec2.yml
   | |   |       |         |-vault.pass
-  | |   |       |         |-group_vars
-  | |   |       |         |          |-all
-  | |   |       |         |          |   |-lib_vars.yml
-  | |   |       |         |          |   |
+  | |   |       |         |
 ```
   
 4. Generate SSH key:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
 
-5. Create Ansible config file:\
+5. Create Ansible config file:
 ```
 sudo mkdir /etc/ansible
 sudo touch /etc/ansible/ansible.cfg
@@ -70,6 +59,7 @@ inventory = /opt/ansible/inventory/aws_ec2.yml
 vault_password_file = /opt/ansible/inventory/vault.pass
 private_key_file = /Users/Dave/.ssh/my_aws
 host_key_checking = False
+remote_user = ubuntu
 
 [inventory]
 enable_plugins = aws_ec2
