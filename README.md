@@ -12,15 +12,7 @@ sudo touch /etc/ansible/ansible.cfg
 ```
 
 3. Setup Ansible vars folder:
-```
-|-/
-| |-opt
-| |   |-ansible
-| |   |       |-inventory
-| |   |       |         |-group_vars
-| |   |       |         |          |-all
-| |   |       |         |          |
-```
+`mkdir -p /opt/ansible/inventory/group_vars/all`
 
 4. Under the inventory folder:
   * Create Ansible vault and vault pass files:
@@ -47,11 +39,26 @@ sudo touch /etc/ansible/ansible.cfg
   compose:
     ansible_user: "{{ansible_user}}"
   ```
+  
   * Create variables file in `group_vars/all`:
   ```
   ---
   ansible_user : ubuntu
   ```
+  
+  * Final directory structure:
+  ```
+  |-/
+  | |-opt
+  | |   |-ansible
+  | |   |       |-inventory
+  | |   |       |         |-aws_ec2.yml
+  | |   |       |         |-vault.pass
+  | |   |       |         |-group_vars
+  | |   |       |         |          |-all
+  | |   |       |         |          |   |-lib_vars.yml
+  | |   |       |         |          |   |
+```
   
 5. Generate SSH key:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
