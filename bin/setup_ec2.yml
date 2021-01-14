@@ -86,7 +86,7 @@
       - pause:
           minutes: 2
 
-      tags: ['never', 'create']
+      tags: ['never', 'create_ec2']
 
     - name: Clear instances
       block:
@@ -102,8 +102,7 @@
           wait: false
         loop: "{{result.instances}}"
         
-      tags: ['never', 'clear']
-
+      tags: ['never', 'clear_ec2']
 
 - hosts: all
   become: yes
@@ -115,4 +114,34 @@
         command: touch ansible.test
 
 
-      tags: ['never', 'inv']
+      tags: ['never', 'test_inventory']
+
+    - name: Install Docker on Hosts
+      block:
+
+      - name: Install pre-reqs 
+        apt: 
+          pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          update_cache: yes
+
+      - name: Add Docker CPG key
+        shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -"
+
+      - name: Add Docker Repo
+        apt_repository:
+          repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+
+      - name: Install Docker
+        apt:
+          pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io 
+          update_cache: yes
+
+      tags: ['never','install_docker']
