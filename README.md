@@ -71,14 +71,18 @@ enable_plugins = aws_ec2
 `ansible-playbook setup_ec2.yml`
 
 2. To create new instances, use the ec2_create tag:\
-`ansible-playbook setup_ec2.yml --tags create`
+`ansible-playbook setup_ec2.yml --tags create_ec2`
 
 3. Terminate all instances:\
-`ansible-playbook setup_ec2.yml --tags clear`
+`ansible-playbook setup_ec2.yml --tags clear_ec2`
 
 4. Test Dynamic Inventory:\
-`ansible-playbook setup_ec2.yml --tags create,inv`
+`ansible-playbook setup_ec2.yml --tags create_ec2,test_inventory`
+
+5. Create Instances and install Docker:
+`ansible-playbook setup_ec2.yml --tags create_ec2,install_docker`
 
 5. Login to instances:\
 `ssh -i ~/.ssh/my_aws ubuntu@(address)`
+
 
