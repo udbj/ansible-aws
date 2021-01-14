@@ -1,1 +1,3 @@
-ABCDEF123345
+---
+ec2_access_key: ACCESSKEY
+ec2_secret_key: SECRETKEY
