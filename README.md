@@ -20,8 +20,8 @@ Deployment on AWS using Ansible.
   ```
   ---
   plugin: aws_ec2
-  aws_access_key: ABCD
-  aws_secret_key: 1234
+  aws_access_key: ACCESSKEY
+  aws_secret_key: SECRETKEY
 
   regions:
     - ap-southeast-2
