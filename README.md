@@ -8,7 +8,7 @@ Deployment on AWS using Ansible.
 2. Setup Ansible inventory folder:\
 `mkdir -p /opt/ansible/inventory/group_vars/all`
 
-3. Under the inventory folder:
+3. Under the `inventory` folder:
   * Create Ansible vault and vault pass files:
   ```
   openssl rand -base64 2048 > vault.pass
