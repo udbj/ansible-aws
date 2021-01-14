@@ -21,7 +21,8 @@ sudo touch /etc/ansible/ansible.cfg
 | |   |       |         |          |-all
 | |   |       |         |          |
 ```
-Under the inventory folder:
+
+4. Under the inventory folder:
   * Create Ansible vault and vault pass files:
   ```
   openssl rand -base64 2048 > vault.pass
@@ -48,10 +49,10 @@ Under the inventory folder:
     ansible_ssh_private_key_file: "{{key_file}}"
   ```
   
-4. Generate SSH key:\
+5. Generate SSH key:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
 
-5. In the Ansible config file, add the following:
+6. In the Ansible config file, add the following:
 ```
 [defaults]
 inventory = /opt/ansible/inventory/aws_ec2.yml
