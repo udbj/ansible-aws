@@ -75,16 +75,19 @@ host_key_checking = False
 enable_plugins = aws_ec2
 ```
 
-## Launch new instances
+## Launch and Setup Instances
 
 4. Run the playbook:\
-`ansible-playbook launch_instance.yml --vault-password-file vault.pass`
+`ansible-playbook setup_ec2.yml`
 
 5. To create new instances, use the ec2_create tag:\
-`ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags create_ec2`
+`ansible-playbook setup_ec2.yml --tags create`
 
 6. Terminate all instances:\
-`ansible-playbook launch_instance.yml --vault-password-file vault.pass --tags clear_ec2`
+`ansible-playbook setup_ec2.yml --tags clear`
+
+7. Test Dynamic Inventory:\
+`ansible-playbook setup_ec2.yml --tags create,inv`
 
 7. Login to instances:\
 `ssh -i ~/.ssh/my_aws ubuntu@(address)`
