@@ -22,14 +22,14 @@ sudo touch /etc/ansible/ansible.cfg
 | |   |       |         |          |
 ```
 Under the inventory folder:
-  1. Create Ansible vault and vault pass files:
+  * Create Ansible vault and vault pass files:
   ```
   openssl rand -base64 2048 > vault.pass
   
   ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
   ```
   
-  2. Create `aws_ec2.yml` script file for dynamic inventory:
+  * Create `aws_ec2.yml` script file for dynamic inventory:
   ```
   ---
   plugin: aws_ec2
