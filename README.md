@@ -11,7 +11,7 @@ sudo mkdir /etc/ansible
 sudo touch /etc/ansible/ansible.cfg
 ```
 
-3. Setup Ansible vars folder:\
+3. Setup Ansible vars folder:
 ```
 |-/
 | |-opt
@@ -21,15 +21,15 @@ sudo touch /etc/ansible/ansible.cfg
 | |   |       |         |          |-all
 | |   |       |         |          |
 ```
-Under the inventory folder:\
-  1. Create Ansible vault and vault pass files:\
+Under the inventory folder:
+  1. Create Ansible vault and vault pass files:
   ```
   openssl rand -base64 2048 > vault.pass
   
   ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
   ```
   
-  2. Create `aws_ec2.yml` script file for dynamic inventory:\
+  2. Create `aws_ec2.yml` script file for dynamic inventory:
   ```
   ---
   plugin: aws_ec2
@@ -51,7 +51,7 @@ Under the inventory folder:\
 4. Generate SSH key:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
 
-5. In the Ansible config file, add the following:\
+5. In the Ansible config file, add the following:
 ```
 [defaults]
 inventory = /opt/ansible/inventory/aws_ec2.yml
