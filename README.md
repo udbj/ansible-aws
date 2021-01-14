@@ -2,10 +2,10 @@
 Deployment on AWS using Ansible.
 
 ## Initial Setup
-1. Generate Access and Secret keys:
+1. Generate Access and Secret keys:\
 `(Username tab) > My Security Credentials > Access Keys > Create New Access Key`
 
-2. Setup Ansible inventory folder:
+2. Setup Ansible inventory folder:\
 `mkdir -p /opt/ansible/inventory/group_vars/all`
 
 3. Under the inventory folder:
