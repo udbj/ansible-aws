@@ -46,7 +46,11 @@ sudo touch /etc/ansible/ansible.cfg
 
   compose:
     ansible_user: "{{ansible_user}}"
-    ansible_ssh_private_key_file: "{{key_file}}"
+  ```
+  * Create variables file in `group_vars/all`:
+  ```
+  ---
+  ansible_user : ubuntu
   ```
   
 5. Generate SSH key:\
