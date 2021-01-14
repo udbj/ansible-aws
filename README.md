@@ -2,19 +2,13 @@
 Deployment on AWS using Ansible.
 
 ## Initial Setup
-1. Generate Access and Secret keys:\
+1. Generate Access and Secret keys:
 `(Username tab) > My Security Credentials > Access Keys > Create New Access Key`
 
-2. Create Ansible config file:\
-```
-sudo mkdir /etc/ansible
-sudo touch /etc/ansible/ansible.cfg
-```
-
-3. Setup Ansible vars folder:
+2. Setup Ansible inventory folder:
 `mkdir -p /opt/ansible/inventory/group_vars/all`
 
-4. Under the inventory folder:
+3. Under the inventory folder:
   * Create Ansible vault and vault pass files:
   ```
   openssl rand -base64 2048 > vault.pass
@@ -60,8 +54,14 @@ sudo touch /etc/ansible/ansible.cfg
   | |   |       |         |          |   |
 ```
   
-5. Generate SSH key:\
+4. Generate SSH key:\
 `ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws`
+
+5. Create Ansible config file:\
+```
+sudo mkdir /etc/ansible
+sudo touch /etc/ansible/ansible.cfg
+```
 
 6. In the Ansible config file, add the following:
 ```
@@ -77,18 +77,18 @@ enable_plugins = aws_ec2
 
 ## Launch and Setup Instances
 
-4. Run the playbook:\
+1. Run the playbook:\
 `ansible-playbook setup_ec2.yml`
 
-5. To create new instances, use the ec2_create tag:\
+2. To create new instances, use the ec2_create tag:\
 `ansible-playbook setup_ec2.yml --tags create`
 
-6. Terminate all instances:\
+3. Terminate all instances:\
 `ansible-playbook setup_ec2.yml --tags clear`
 
-7. Test Dynamic Inventory:\
+4. Test Dynamic Inventory:\
 `ansible-playbook setup_ec2.yml --tags create,inv`
 
-7. Login to instances:\
+5. Login to instances:\
 `ssh -i ~/.ssh/my_aws ubuntu@(address)`
 
