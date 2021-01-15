@@ -17,8 +17,6 @@
     - name: Facts
       block:
 
-      - meta: refresh_inventory
-
       - name: Get instances facts
         ec2_instance_info:
           aws_access_key: "{{ec2_access_key}}"
@@ -63,10 +61,14 @@
           aws_secret_key: "{{ec2_secret_key}}"
           rules:
             - proto: tcp
-              ports:
-                - 22
+              ports: 22
               cidr_ip: 0.0.0.0/0
               rule_desc: allow all on ssh port
+            
+            - proto: tcp
+              ports: 5984
+              cidr_ip: 0.0.0.0/0
+              rule_desc: allow all on couchdb port
         register: result_sec_group
 
       - name: Provision instances
@@ -106,7 +108,6 @@
       tags: ['never', 'clear_ec2']
 
 - hosts: all
-  become: yes
 
   tasks:
     - name: Test Dynamic Inventory
@@ -134,13 +135,17 @@
           - software-properties-common
           - python3-pip
           update_cache: yes
+        become: yes
 
       - name: Add Docker CPG key
         shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -"
+        become: yes
+        warn: false
 
       - name: Add Docker Repo
         apt_repository:
           repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+        become: yes
 
       - name: Install Docker
         apt:
@@ -149,6 +154,7 @@
           - docker-ce-cli
           - containerd.io 
           update_cache: yes
+        become: yes
 
       - name: Install Python packages
         pip:
@@ -158,15 +164,22 @@
 
       - name: Add user to docker group
         shell: usermod -aG docker ubuntu
+        become: yes
+
+      - meta: reset_connection
 
       tags: ['never','setup_docker']
 
     - name: Setup CouchDB
       block:
-
+        
       - name: Pull CouchDB container
         docker_image:
           name: couchdb 
           source: pull
-          
+
+      - name: Set login credentials and run
+        shell: docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5984:5984 -d couchdb
+
+
       tags: ['never', 'setup_couchdb']
