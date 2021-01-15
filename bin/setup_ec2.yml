@@ -17,6 +17,8 @@
     - name: Facts
       block:
 
+      - meta: refresh_inventory
+
       - name: Get instances facts
         ec2_instance_info:
           aws_access_key: "{{ec2_access_key}}"
@@ -113,6 +115,10 @@
       - name: create file
         command: touch ansible.test
 
+        
+      - name: write hosts
+        shell: echo {{item}} >> ansible.test
+        loop: "{{ansible_play_hosts}}"
 
       tags: ['never', 'test_inventory']
 
