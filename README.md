@@ -79,7 +79,7 @@ enable_plugins = aws_ec2
 4. Test Dynamic Inventory:\
 `ansible-playbook setup_ec2.yml --tags create_ec2,test_inventory`
 
-5. Create Instances and install Docker:
+5. Create Instances and install Docker:\
 `ansible-playbook setup_ec2.yml --tags create_ec2,install_docker`
 
 5. Login to instances:\
