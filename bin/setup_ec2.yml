@@ -112,12 +112,11 @@
   tasks:
     - name: Test Dynamic Inventory
       block:
-      - name: create file
-        command: touch ansible.test
-
-        
-      - name: write hosts
-        shell: echo {{item}} >> ansible.test
+      - name: write current host 
+        shell: echo {{inventory_hostname}} >> current.host
+ 
+      - name: write all hosts
+        shell: echo {{item}} >> all.hosts
         loop: "{{ansible_play_hosts}}"
 
       tags: ['never', 'test_inventory']
@@ -140,7 +139,8 @@
       - name: Add Docker CPG key
         shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -"
         become: yes
-        warn: false
+        args:
+          warn: false
 
       - name: Add Docker Repo
         apt_repository:
