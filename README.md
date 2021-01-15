@@ -1,5 +1,5 @@
 # ansible-aws
-Deployment on AWS using Ansible.
+A single Ansible script to create three EC2 instances and set up a couchDB cluster on them. 
 
 ## Initial Setup
 1. Generate Access and Secret keys:\
