@@ -1,5 +1,5 @@
 # ansible-aws
-A single Ansible script to create EC2 instances and set up a dockerised couchDB cluster on them. 
+A single Ansible script to create EC2 instances and set up a dockerised CouchDB cluster on them. 
 
 ## Initial Setup
 1. Generate Access and Secret keys:\
