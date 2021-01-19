@@ -1,3 +1,9 @@
 ---
 ec2_access_key: ACCESSKEY
 ec2_secret_key: SECRETKEY
+couchdb_name: COUCHDB
+couchdb_hashed_pass: -pbkdf2-preHashedPassword
+couchdb_pass: COUCHDBPASS
+erl_cookie: ERLCOOKIE
+couchdb_secret: COUCHDB-SECRET-UUID
+cluster_id: COUCHDB-CLUSTER-UUID
