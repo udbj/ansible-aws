@@ -10,7 +10,7 @@
   vars:
     key_name: my_aws
     region: ap-southeast-2
-    image: ami-07fbdcfe29326c4fb # https://cloud-images.ubuntu.com/locator/ec2/
+    image: ami-07fbdcfe29326c4fb
 
   tasks:
 
@@ -66,9 +66,17 @@
               rule_desc: allow all on ssh port
             
             - proto: tcp
-              ports: 5984
+              ports:
+                - 5984
+                - 4369
               cidr_ip: 0.0.0.0/0
               rule_desc: allow all on couchdb port
+
+            - proto: tcp
+              from_port: 9100
+              to_port: 9200
+              cidr_ip: 0.0.0.0/0
+              rule_desc: allow all on erlang ports
         register: result_sec_group
 
       - name: Provision instances
@@ -89,7 +97,7 @@
       - pause:
           minutes: 2
 
-      tags: ['never', 'create_ec2']
+      tags: ['never', 'create_ec2','setup_full']
 
     - name: Clear instances
       block:
@@ -124,7 +132,7 @@
     - name: Setup Docker on Hosts
       block:
 
-      - name: Install pre-reqs 
+      - name: Install Docker pre-reqs 
         apt: 
           pkg:
           - apt-transport-https
@@ -168,18 +176,63 @@
 
       - meta: reset_connection
 
-      tags: ['never','setup_docker']
-
-    - name: Setup CouchDB
-      block:
-        
       - name: Pull CouchDB container
         docker_image:
           name: couchdb 
           source: pull
 
-      - name: Set login credentials and run
-        shell: docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5984:5984 -d couchdb
 
+      tags: ['never','setup_docker','setup_full']
 
-      tags: ['never', 'setup_couchdb']
+    - name: Setup CouchDB
+      block:      
+
+      - name: Launch couchDB container
+        shell: docker run -e ERL_FLAGS="-setcookie \"{{erl_cookie}}\"" -e COUCHDB_USER={{couchdb_name}} -e COUCHDB_PASSWORD={{couchdb_hashed_pass}} -e NODENAME={{inventory_hostname}} -e COUCHDB_SECRET={{couchdb_secret}} -p 5984:5984 -p 4369:4369 -p 9100-9200:9100-9200 -d --name my-couchdb couchdb
+
+      - pause:
+          minutes: 1
+
+      - name: Set cluster UUID
+        shell: curl -X PUT http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_node/_local/_config/couchdb/uuid -d '"{{cluster_id}}"'
+        register: shell_output
+        args:
+          warn: false
+
+      - debug: var=shell_output.stdout_lines
+
+      - name: Bind clustered interface to all IP addresses
+        shell: curl -X PUT http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_node/_local/_config/chttpd/bind_address -d '"0.0.0.0"'
+        args:
+          warn: false
+
+      - name: Set up nodes
+        shell: curl -X POST -H "Content-Type:application/json" http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_cluster_setup -d '{"action":"enable_cluster", "bind_address":"0.0.0.0", "username":"{{couchdb_name}}", "password":"{{couchdb_pass}}", "node_count":"3"}'
+        args:
+          warn: false
+
+      - name: Enable cluster for nodes
+        shell: curl -X POST -H "Content-Type:application/json" http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_cluster_setup -d '{"action":"enable_cluster", "bind_address":"0.0.0.0", "username":"{{couchdb_name}}", "password":"{{couchdb_pass}}", "port":"5984", "node_count":"3", "remote_node":"{{item}}", "remote_current_user":"{{couchdb_name}}", "remote_current_password":"{{couchdb_pass}}" }'
+        args:
+          warn: false
+        with_items: "{{ansible_play_hosts[1:]}}"
+        when: inventory_hostname == ansible_play_hosts[0]
+      
+      - name: Add nodes to cluster
+        shell: curl -X POST -H "Content-Type:application/json" http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_cluster_setup -d '{"action":"add_node", "host":"{{item}}", "port":"5984", "username":"{{couchdb_name}}", "password":"{{couchdb_pass}}"}'
+        args:
+          warn: false
+        with_items: "{{ansible_play_hosts[1:]}}"
+        when: inventory_hostname == ansible_play_hosts[0]
+
+      - name: Finish cluster setup 
+        shell: curl -X POST -H "Content-Type:application/json" http://{{couchdb_name}}:{{couchdb_pass}}@127.0.0.1:5984/_cluster_setup -d '{"action":"finish_cluster"}'
+        args:
+          warn: false
+        when: inventory_hostname == ansible_play_hosts[0]
+
+      - name: Install interface for python
+        pip:
+          name: couchdb
+
+      tags: ['never','setup_couchdb','setup_full']
