@@ -108,3 +108,6 @@ cluster_id: COUCHDB-CLUSTER-UUID
 
 5. Terminate all instances:\
 `ansible-playbook setup_ec2.yml --tags clear_ec2`
+
+## Notes
+* The script allows traffic from all addresses. Configure the security rules as per your needs.
