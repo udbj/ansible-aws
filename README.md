@@ -91,7 +91,7 @@ enable_plugins = aws_ec2
 `ssh -i ~/.ssh/my_aws ubuntu@(address)`
 
 4. To check which nodes are connected to cluster:\
-`curl http://USERNAME:PASSWORD@127.0.0.1:5984/_membership`
+`curl http://USERNAME:PASSWORD@(address):5984/_membership`
 
 5. Terminate all instances:\
 `ansible-playbook setup_ec2.yml --tags clear_ec2`
