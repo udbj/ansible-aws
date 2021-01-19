@@ -64,28 +64,34 @@ remote_user = ubuntu
 [inventory]
 enable_plugins = aws_ec2
 ```
+7. Use `couchdb-hash-pwd` to generate pre-hashed, pre-salted password for every CouchDB node.\
+
+8. Generate cluster secret and UUID using `uuidgen`.
 
 ## Launch and Setup Instances
 
-1. Run the playbook:\
-`ansible-playbook setup_ec2.yml`
+To set up everything, run:\
+`ansible-playbook setup_ec2.yml --tags setup_full`
 
-2. To create new instances, use the ec2_create tag:\
+To do everything step-by-step:
+
+* To create new instances:\
 `ansible-playbook setup_ec2.yml --tags create_ec2`
 
-3. Terminate all instances:\
-`ansible-playbook setup_ec2.yml --tags clear_ec2`
+* Test Dynamic Inventory:\
+`ansible-playbook setup_ec2.yml --tags test_inventory`
 
-4. Test Dynamic Inventory:\
-`ansible-playbook setup_ec2.yml --tags create_ec2,test_inventory`
+* Setup Docker on created instances:\
+`ansible-playbook setup_ec2.yml --tags setup_docker`
 
-5. Create Instances and setup Docker:\
-`ansible-playbook setup_ec2.yml --tags create_ec2,setup_docker`
+* Setup CouchDB on Docker:\
+`ansible-playbook setup_ec2.yml --tags setup_couchdb`
 
-6. Setup Docker and CouchDB:\
-`ansible-playbook setup_ec2.yml --tags setup_docker,setup_couchdb`
-
-7. Login to instances:\
+Login to instances by specifying the `ssh` key:\
 `ssh -i ~/.ssh/my_aws ubuntu@(address)`
 
+To check which nodes are connected to cluster:\
+`curl http://USERNAME:PASSWORD@127.0.0.1:5984/_membership`
 
+Terminate all instances:\
+`ansible-playbook setup_ec2.yml --tags clear_ec2`
