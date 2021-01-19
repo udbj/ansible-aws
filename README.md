@@ -68,6 +68,19 @@ enable_plugins = aws_ec2
 
 8. Generate cluster secret and UUID using `uuidgen`.
 
+9. Create variables file for the script:
+```
+---
+ec2_access_key: ACCESSKEY
+ec2_secret_key: SECRETKEY
+couchdb_name: COUCHDB
+couchdb_hashed_pass: -pbkdf2-preHashedPassword
+couchdb_pass: COUCHDBPASS
+erl_cookie: ERLCOOKIE
+couchdb_secret: COUCHDB-SECRET-UUID
+cluster_id: COUCHDB-CLUSTER-UUID
+```
+
 ## Launch and Setup Instances
 
 1. To set up everything, run:\
